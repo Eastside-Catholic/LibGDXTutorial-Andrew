@@ -4,17 +4,17 @@ public class Stage {
 	boolean[][] walls;
 	public Stage()
 	{
-		this.walls = new boolean[10][10];
-		for (int i=0;i<10;i++)
+		this.walls = new boolean[11][11];
+		for (int i=0;i<11;i++)
 		{
 			this.walls[i][0]=true;
-			this.walls[i][9]=true;
+			this.walls[i][10]=true;
 			this.walls[0][i]=true;
-			this.walls[9][i]=true;
+			this.walls[10][i]=true;
 		}
-		for (int i=2;i<10;i+=4)
+		for (int i=2;i<11;i+=3)
 		{
-			for (int j=2;j<10;j+=4)
+			for (int j=2;j<11;j+=3)
 			{
 				this.walls[i][j]=true;
 			}
