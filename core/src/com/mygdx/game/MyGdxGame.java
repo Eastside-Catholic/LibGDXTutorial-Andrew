@@ -44,13 +44,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-	    int tx=(int)Math.floor(enemy.x/32);
-        int ty=(int)Math.floor(enemy.y/32);
-        int px=(int)Math.floor(MyGdxGame.playerx/32);
-        int py=(int)Math.floor(MyGdxGame.playery/32);
-        
-        //Pathfinder.pathfind(tx,ty,px,py);
-	    
 		int keyspressed=0;
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
 			keyspressed+=1;
@@ -147,91 +140,98 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP))
 		{
-			if (playery%32<=16 || !Stage.get(playerx/32, playery/32+1))
+    		     if (playery%32<=16 || !Stage.get(playerx/32,playery/32+1))
+    		{
+    
+    			playery++;
+    		}
+			if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT))
 			{
-		
-			playery++;
-			}
-			if (!Gdx.input.isKeyPressed(Input.Keys.LEFT)&&!Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-			{
-				if (playerx%32>16)
+				if (playerx%32 > 16)
 
-				playerx--;
-			if (playerx%32<16)
-				playerx++;
+					playerx--;
+				if (playerx%32 < 16)
+					playerx++;
 			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
 		{
-		
-			if (playery%32>=16 || !Stage.get(playerx/32, playery/32-1))
+
+			if (playery%32>=16 || !Stage.get(playerx/32,playery/32-1))
 			{
-			playery--;
+				playery--;
 			}
-			if (!Gdx.input.isKeyPressed(Input.Keys.LEFT)&&!Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-			{if (playerx%32>16)
-				playerx--;
-			if (playerx%32<16)
-				playerx++;
+			if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+			{
+				if (playerx%32 > 16)
+					playerx--;
+				if (playerx%32 < 16)
+					playerx++;
 			}
 		}
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		font.draw(batch, Stage.get(playerx/32, playery/32)?"T":"F", 500, 500);
-		font.draw(batch, Stage.get(playerx/32+1, playery/32)?"T":"F", 520, 500);
-		font.draw(batch, Stage.get(playerx/32-1, playery/32)?"T":"F", 480, 500);
-		font.draw(batch, Stage.get(playerx/32, playery/32+1)?"T":"F", 500, 520);
-		font.draw(batch, Stage.get(playerx/32, playery/32-1)?"T":"F", 500, 480);
-		font.draw(batch, ""+playerx, 400,400);
-		font.draw(batch, ""+playery, 500,400);
-		font.draw(batch, ""+enemy.x, 400,420);
-        font.draw(batch, ""+enemy.y, 500,420);
+		font.draw(batch,Stage.get(playerx/32,playery/32) ? "T" : "F",500,500);
+		font.draw(batch,Stage.get(playerx/32 + 1,playery/32) ? "T" : "F",520,500);
+		font.draw(batch,Stage.get(playerx/32 - 1,playery/32) ? "T" : "F",480,500);
+		font.draw(batch,Stage.get(playerx/32,playery/32 + 1) ? "T" : "F",500,520);
+		font.draw(batch,Stage.get(playerx/32,playery/32 - 1) ? "T" : "F",500,480);
+		font.draw(batch,Stage.get(((int) enemy.x)/32,((int) enemy.y)/32) ? "T" : "F",400,500);
+		font.draw(batch,Stage.get(((int) enemy.x)/32+1,((int) enemy.y)/32) ? "T" : "F",420,500);
+		font.draw(batch,Stage.get(((int) enemy.x)/32-1,((int) enemy.y)/32) ? "T" : "F",380,500);
+		font.draw(batch,Stage.get(((int) enemy.x)/32,((int) enemy.y)/32+1) ? "T" : "F",400,520);
+		font.draw(batch,Stage.get(((int) enemy.x)/32,((int) enemy.y)/32-1) ? "T" : "F",400,480);
+		font.draw(batch,"" + playerx,400,400);
+		font.draw(batch,"" + playery,500,400);
+		font.draw(batch,"" + ((int) enemy.x),400,420);
+		font.draw(batch,"" + ((int) enemy.y),500,420);
 		if (lose)
 		{
-		    int dex=0;
-		    int dey=0;
-		    while (true)
-		    {
-		        dex=random.nextInt(11);
-		        dey=random.nextInt(11);
-		        if (Stage.get(dex, dey)==false)
-		            break;
-		    }
-		    playerx=16+dex*32;
-		    playery=16+dey*32;
-		    while (true)
-		    {
-                dex=random.nextInt(11);
-                dey=random.nextInt(11);
-                if ((Stage.get(dex, dey)==false)&&(dex!=playerx)&&(dey!=playery))
-                    break;
-            }
-		    enemy = new Enemy(16+dex*32,16+dey*32);
-		    lose=false;
+			Stage.init();
+			int dex=0;
+			int dey=0;
+			while (true)
+			{
+				dex=random.nextInt(Stage.walls.length);
+				dey=random.nextInt(Stage.walls[0].length);
+				if (Stage.get(dex,dey) == false)
+					break;
+			}
+			playerx=16 + dex * 32;
+			playery=16 + dey * 32;
+			while (true)
+			{
+				dex=random.nextInt(Stage.walls.length);
+				dey=random.nextInt(Stage.walls[0].length);
+				if ((Stage.get(dex,dey) == false) && (dex != playerx) && (dey != playery))
+					break;
+			}
+			enemy=new Enemy(16 + dex * 32,16 + dey * 32);
+			lose=false;
 		}
-		batch.draw(player, playerx-16, playery-16);
-		if (proj!=null)
+		Pathfinder.draw(batch,font);
+		batch.draw(player,playerx - 16,playery - 16);
+		if (proj != null)
 		{
 			proj.tick();
-			batch.draw(projs, proj.x-16, proj.y-16);
+			batch.draw(projs,proj.x - 16,proj.y - 16);
 		}
-		for (int i=0;i<11;i++)
+		for (int i=0; i < Stage.walls.length; i++)
+		{
+			for (int j=0; j < Stage.walls[0].length; j++)
 			{
-			for (int j=0;j<11;j++)
+				if (Stage.get(i,j))
 				{
-				if (Stage.get(i, j))
-					{
-					batch.draw(wall, i*32, j*32);
-					}
+					batch.draw(wall,i * 32,j * 32);
 				}
 			}
-		if (enemy!=null)
-				{
-					enemy.tick();
-					batch.draw(enemys, enemy.x-16,enemy.y-16);
-				}
-		Pathfinder.draw(batch, font);
+		}
+		if (enemy != null)
+		{
+			enemy.tick();
+			batch.draw(enemys,enemy.x - 16,enemy.y - 16);
+		}
 		batch.end();
 	}
 }

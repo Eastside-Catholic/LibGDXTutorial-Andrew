@@ -44,8 +44,8 @@ public class Enemy {
 	        System.out.println(tsq[0]);
 	        System.out.println(tsq[1]);
 		}
-		this.x+=dx;
-		this.y+=dy;
+		this.x+=dx/2.0;
+		this.y+=dy/2.0;
 		if (MyGdxGame.proj!=null)
 		{
 		if (((int)this.x/32==MyGdxGame.proj.x/32)&&((int)this.y/32==MyGdxGame.proj.y/32))
@@ -53,6 +53,7 @@ public class Enemy {
 			this.x=-64;
 			this.y=-64;
 			this.active=false;
+			MyGdxGame.lose=true;
 		}}
 		if (((int)this.x/32==MyGdxGame.playerx/32)&&((int)this.y/32==MyGdxGame.playery/32))
 		{

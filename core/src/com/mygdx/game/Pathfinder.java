@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Pathfinder {
     public static ArrayList<int[]> queue = new ArrayList<int[]>();
-    public static int[][] cells = new int[11][11];
+    public static int[][] cells = new int[Stage.walls.length][Stage.walls[0].length];
     public static final int[][] ia =(new int[][] {{0,1},{1,0},{0,-1},{-1,0}});
     public static int[] pathfind(int cx, int cy, int tx, int ty)
     {
@@ -21,15 +21,22 @@ public class Pathfinder {
             return new int[] {cx,cy};
         }
         queue.clear();
-        for (int x=0; x<11; x++)
-            for (int y=0; y<11; y++)
+        for (int x=0; x<Stage.walls.length; x++)
+            for (int y=0; y<Stage.walls[0].length; y++)
                 cells[x][y]=Stage.get(x, y)?999:998;
         queue.add(new int[] {tx,ty,0});
         cells[tx][ty]=0;
         boolean done=false;
         System.out.println("PF1");
+        int mx=0;
         while (!done)
         {
+            mx++;
+            if (mx>1000)
+            {
+                MyGdxGame.lose=true;
+                break;
+            }
             ArrayList<int[]> tq = new ArrayList<int[]>();
             for (int[] i : queue)
             {
@@ -72,13 +79,13 @@ public class Pathfinder {
         Gdx.gl.glEnable(GL30.GL_BLEND);
         Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
         Color color = new Color(1,1,1,1);
-        color.a=0.5f;
+        color.a=1.0f;
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.begin(ShapeType.Filled);
         int mc=0;
-        for(int x=0; x<11; x++)
+        for(int x=0; x<Stage.walls.length; x++)
         {
-            for(int y=0; y<11; y++)
+            for(int y=0; y<Stage.walls[0].length; y++)
             {
                 if (cells[x][y]>900)
                     continue;
@@ -87,9 +94,9 @@ public class Pathfinder {
                     mc=cells[x][y];
             }
             }
-        for(int x=0; x<11; x++)
+        for(int x=0; x<Stage.walls.length; x++)
         {
-            for(int y=0; y<11; y++)
+            for(int y=0; y<Stage.walls[0].length; y++)
             {
                 if (cells[x][y]==999)
                 {
