@@ -5,11 +5,15 @@ import java.util.Random;
 public class Stage {
 
     public static boolean[][] walls;
-    static int                w = 16;
-    static int                h = 16;
-
-    public static void init() {
-        walls = new boolean[][] {{true,true,true,true,true,true,true,true,true,true,true},
+    static final int                W = 16;
+    static final int                H = 16;
+    static final double DIFFICULTY_RAMP=5.0;
+    /**
+     * Randomly generates a new stage. Higher-level stages are denser.
+     * @param level The current difficulty level.
+     */
+    public static void init(int level) {
+        /*walls = new boolean[][] {{true,true,true,true,true,true,true,true,true,true,true},
                 {true,false,false,false,false,false,false,false,false,false,true},
                 {true,false,true,false,true,true,true,true,true,true,true},
                 {true,false,true,false,false,false,true,false,false,false,true},
@@ -19,28 +23,40 @@ public class Stage {
                 {true,false,true,false,true,false,false,false,false,false,true},
                 {true,false,true,true,true,false,true,true,true,false,true},
                 {true,false,false,false,false,false,true,false,false,false,true},
-                {true,true,true,true,true,true,true,true,true,true,true}};
-        walls = new boolean[w][h];
-        for (int x = 0; x<w; x++)
+                {true,true,true,true,true,true,true,true,true,true,true}};*/
+        walls = new boolean[W][H];
+        for (int x = 0; x<W; x++)
         {
             walls[x][0] = true;
-            walls[x][w-1] = true;
+            walls[x][W-1] = true;
         }
-        for (int y = 0; y<h; y++)
+        for (int y = 0; y<H; y++)
         {
             walls[0][y] = true;
-            walls[h-1][y] = true;
+            walls[H-1][y] = true;
         }
         Random random = new Random();
-        for (int x = 1; x<w-1; x++)
-            for (int y = 1; y<h-1; y++)
-                walls[x][y] = random.nextBoolean();
+        for (int x = 1; x<W-1; x++)
+        {
+            for (int y = 1; y<H-1; y++)
+            {
+                double w=(1.0-(DIFFICULTY_RAMP/(MyGdxGame.level+DIFFICULTY_RAMP)));
+                System.out.println(w);
+                walls[x][y] = (random.nextFloat()<w);
+            }
+        }
         // walls[1][1]=false;
         // walls[9][9]=false;
     }
 
+    /**
+     * Gets the tile at a coordinate
+     * @param x the tile X coordinate
+     * @param y the tile y coordinate
+     * @return true if the tile contains a wall.
+     */
     public static boolean get(int x, int y) {
-        if ((x<0)||(y<0)||(x>w)||(y>h))
+        if ((x<0)||(y<0)||(x>W)||(y>H))
             return true;
         return walls[x][y];
     }
