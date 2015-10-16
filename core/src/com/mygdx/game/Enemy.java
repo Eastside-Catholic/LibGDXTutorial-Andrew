@@ -3,12 +3,14 @@ package com.mygdx.game;
 public class Enemy {
 
     static final int TILE_SIZE = MyGdxGame.TILE_SIZE;
+    static final float TICKS_PER_PIXEL = 10;
     float   x;
     float   y;
-    int     dx;
-    int     dy;
+    double     dx;
+    double     dy;
     int[]   tsq;
     boolean active = true;
+    public int speed = 1;
 
     public Enemy(int x, int y) {
         this.x = x;
@@ -21,31 +23,42 @@ public class Enemy {
     public void tick() {
         if (!this.active)
             return;
-        int tx = (int) Math.floor(this.x/TILE_SIZE);
-        int ty = (int) Math.floor(this.y/TILE_SIZE);
-        int px = (int) Math.floor(MyGdxGame.playerx/TILE_SIZE);
-        int py = (int) Math.floor(MyGdxGame.playery/TILE_SIZE);
-
-        if ((this.x%TILE_SIZE==(TILE_SIZE/2))&&(this.y%TILE_SIZE==(TILE_SIZE/2)))
+        for (int i=0; i<this.speed; i++)
         {
-            aiTick(tx,ty,px,py);
-        }
-        this.x += dx/2.0;
-        this.y += dy/2.0;
-        if (MyGdxGame.proj!=null)
-        {
-            if (((int) this.x/TILE_SIZE==MyGdxGame.proj.x/TILE_SIZE)&&((int) this.y/TILE_SIZE==MyGdxGame.proj.y/TILE_SIZE))
+            int tx = (int) Math.floor(this.x/TILE_SIZE);
+            int ty = (int) Math.floor(this.y/TILE_SIZE);
+            int px = (int) Math.floor(MyGdxGame.playerx/TILE_SIZE);
+            int py = (int) Math.floor(MyGdxGame.playery/TILE_SIZE);
+    
+            if ((((int)this.x)%TILE_SIZE==(TILE_SIZE/2))&&(((int)this.y)%TILE_SIZE==(TILE_SIZE/2)))
             {
-                MyGdxGame.level++;
-                MyGdxGame.lose = true;
+                aiTick(tx,ty,px,py);
+            }
+            this.x += dx/TICKS_PER_PIXEL;
+            this.y += dy/TICKS_PER_PIXEL;
+            if (MyGdxGame.proj!=null)
+            {
+                if (((int) this.x/TILE_SIZE==MyGdxGame.proj.x/TILE_SIZE)&&((int) this.y/TILE_SIZE==MyGdxGame.proj.y/TILE_SIZE))
+                {
+                    if (!MyGdxGame.generating)
+                    {
+                        MyGdxGame.level++;
+                    }
+                    MyGdxGame.regenLevel = true;
+                    return;
+                }
+            }
+            if (((int) this.x/TILE_SIZE==MyGdxGame.playerx/TILE_SIZE)&&((int) this.y/TILE_SIZE==MyGdxGame.playery/TILE_SIZE))
+            {
+                if (!MyGdxGame.generating)
+                {
+                    MyGdxGame.level=0;
+                }
+                MyGdxGame.regenLevel = true;
+                return;
             }
         }
-        if (((int) this.x/TILE_SIZE==MyGdxGame.playerx/TILE_SIZE)&&((int) this.y/TILE_SIZE==MyGdxGame.playery/TILE_SIZE))
-        {
-            MyGdxGame.level=0;
-            MyGdxGame.lose = true;
-        }
-
+        MyGdxGame.generating=false;
     }
 
     /**

@@ -37,14 +37,13 @@ public class Pathfinder {
         queue.add(new int[] {tx,ty,0});
         cells[tx][ty] = 0;
         boolean done = false;
-        System.out.println("PF1");
         int mx = 0;
         while (!done)
         {
             mx++;
             if (mx>MAX_ITERATIONS)
             {
-                MyGdxGame.lose = true;
+                MyGdxGame.regenLevel = true;
                 break;
             }
             ArrayList<int[]> tq = new ArrayList<int[]>();

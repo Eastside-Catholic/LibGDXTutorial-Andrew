@@ -5,9 +5,9 @@ import java.util.Random;
 public class Stage {
 
     public static boolean[][] walls;
+    public static double density;
     static final int                W = 16;
     static final int                H = 16;
-    static final double DIFFICULTY_RAMP=5.0;
     /**
      * Randomly generates a new stage. Higher-level stages are denser.
      * @param level The current difficulty level.
@@ -40,9 +40,7 @@ public class Stage {
         {
             for (int y = 1; y<H-1; y++)
             {
-                double w=(1.0-(DIFFICULTY_RAMP/(MyGdxGame.level+DIFFICULTY_RAMP)));
-                System.out.println(w);
-                walls[x][y] = (random.nextFloat()<w);
+                walls[x][y] = (random.nextFloat()<density);
             }
         }
         // walls[1][1]=false;
