@@ -5,15 +5,14 @@ import java.util.Random;
 public class Stage {
 
     public static boolean[][] walls;
-    public static double density;
     static final int                W = 16;
     static final int                H = 16;
     /**
      * Randomly generates a new stage. Higher-level stages are denser.
      * @param level The current difficulty level.
      */
-    public static void init(int level) {
-        /*walls = new boolean[][] {{true,true,true,true,true,true,true,true,true,true,true},
+    public static void init(int level, double density) {
+        /*walls = new boolean[][] {{true,true,true,true,true,true,true,true,true,true,true},            //This is old. It's a maze to test pathfinding.
                 {true,false,false,false,false,false,false,false,false,false,true},
                 {true,false,true,false,true,true,true,true,true,true,true},
                 {true,false,true,false,false,false,true,false,false,false,true},
@@ -43,8 +42,6 @@ public class Stage {
                 walls[x][y] = (random.nextFloat()<density);
             }
         }
-        // walls[1][1]=false;
-        // walls[9][9]=false;
     }
 
     /**
