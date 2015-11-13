@@ -29,10 +29,10 @@ public class MyGdxGame extends ApplicationAdapter {
     static final int HALF_TILE_SIZE = TILE_SIZE/2;
 
     // Constants for key-pressed bitmap
-    private static final int KEY_LEFT  = 0b0001;
-    private static final int KEY_RIGHT = 0b0010;
-    private static final int KEY_UP    = 0b0100;
-    private static final int KEY_DOWN  = 0b1000;
+    private static final int KEY_LEFT  = 0x1;
+    private static final int KEY_RIGHT = 0x2;
+    private static final int KEY_UP    = 0x4;
+    private static final int KEY_DOWN  = 0x8;
 
     // Direction constants
     private static final int DIR_N  = 1;
